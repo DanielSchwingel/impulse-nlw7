@@ -1,8 +1,22 @@
 import 'dotenv/config'
 import express from 'express'
+import http from 'http'
+import { Server } from 'socket.io'
 import { router } from './routes'
 
 const app = express()
+const httpServer = http.createServer(app)
+
+const io = new Server(httpServer, {
+    cors: {
+        origin: '*'
+    }
+})
+
+io.on("connection", (socket) => {
+    console.log(`Usuário conectado no socket ${socket.id}`)
+})
+
 app.use(express.json())
 app.use(router)
 
